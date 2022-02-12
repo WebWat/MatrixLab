@@ -1,21 +1,22 @@
 ﻿using System.Diagnostics;
 using MatrixLab;
 
-var matrix_1 = new Matrix(new int[,]
+void Test()
 {
-    { 1, -1, 3 },
-    { 2, 0, 2 },
-});
+    using var matrix_1 = new Matrix(5000, 5000, (i, j) => i);
 
-var matrix_2 = new Matrix(new int[,]
+    using var matrix_2 = new Matrix(5000, 5000, (i, j) => i);
+
+    using var matrix_3 = Matrix.CreateEmpty();
+}
+
+void M()
 {
-    { 0, 1, 2, 0 },
-    { -1, 2, 0, 0 },
-    { 1, 2, 1, 0 },
-});
+    Test();
+}
 
-var result = matrix_1 * matrix_2;
-
-Console.WriteLine(result);
+M();
 
 Console.WriteLine("End");
+
+Console.ReadLine();

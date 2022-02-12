@@ -2,18 +2,16 @@
 
 namespace MatrixLab
 {
-    public sealed class Matrix
+    public sealed class Matrix : IDisposable
     {
-        private readonly int _rows;
         public int Rows
         {
-            get { return _rows; }
+            get { return _array.GetLength(0); }
         }
 
-        private readonly int _columns;
         public int Columns
         {
-            get { return _columns; }
+            get { return _array.GetLength(1); }
         }
 
         private int[,] _array;
@@ -29,30 +27,21 @@ namespace MatrixLab
 
         public Matrix(int[,] array)
         {
-            _rows = array.GetLength(0);
-            _columns = array.GetLength(1);
-
             _array = array;
         }
 
         public Matrix(int row, int column)
         {
-            _rows = row;
-            _columns = column;
-
             _array = new int[row, column];
         }
 
         public Matrix(int row, int column, Func<int, int, int> func)
         {
-            _rows = row;
-            _columns = column;
-
             _array = new int[row, column];
 
-            for (int i = 0; i < _rows; i++)
+            for (int i = 0; i < row; i++)
             {
-                for (int j = 0; j < _columns; j++)
+                for (int j = 0; j < column; j++)
                 {
                     this[i, j] = func(i, j);
                 }
@@ -122,14 +111,14 @@ namespace MatrixLab
 
                 while (row < matrix_2.Columns)
                 {
-                    int mem = 0;
+                    int memory = 0;
 
                     for (int j = 0; j < matrix_1.Columns; j++)
                     {
-                        mem += matrix_1[i, j] * matrix_2[j, row];
+                        memory += matrix_1[i, j] * matrix_2[j, row];
                     }
 
-                    result[i, row] = mem;
+                    result[i, row] = memory;
 
                     row++;
                 }
@@ -199,6 +188,13 @@ namespace MatrixLab
             }
 
             _array = newArray;
+        }
+
+        public void Dispose()
+        {
+            _array = new int[0, 0];
+
+            GC.Collect();
         }
     }
 }
