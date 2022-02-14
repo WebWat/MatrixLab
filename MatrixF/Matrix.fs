@@ -25,13 +25,7 @@ type public Matrix(array: int[,]) =
     member _.Length = array.Length
 
     static member (~-) (matrix: Matrix) =
-        let result = Matrix(matrix.Array)
-
-        for i = 0 to matrix.Rows - 1 do
-            for j = 0 to matrix.Columns - 1 do
-                result[i, j] <- -result[i, j]
-
-        result
+        Matrix(Array2D.map (fun x -> -x) matrix.Array)
 
     static member (+) (m1: Matrix, m2: Matrix) =
         if m1.Columns <> m2.Columns || m1.Rows <> m2.Rows then
