@@ -98,7 +98,7 @@ namespace MatrixLab
             return result;
         }
 
-        public static Matrix operator *(Matrix matrix_1, Matrix matrix_2)
+        public static Matrix operator * (Matrix matrix_1, Matrix matrix_2)
         {
             if (matrix_1.Columns != matrix_2.Rows)
                 throw new ArgumentException("Error");
@@ -127,7 +127,7 @@ namespace MatrixLab
             return result;
         }
 
-        public static Matrix operator *(int x, Matrix matrix)
+        public static Matrix operator * (int x, Matrix matrix)
         {
             var result = new Matrix(matrix.Rows, matrix.Rows);
 
