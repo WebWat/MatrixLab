@@ -35,7 +35,7 @@ type public Matrix(array: int[,]) =
 
         for i = 0 to m1.Rows - 1 do
             for j = 0 to m1.Columns - 1 do
-                result[1, 1] <- m1[i, j] + m2[i, j]
+                result[i, j] <- m1[i, j] + m2[i, j]
 
         result
         
