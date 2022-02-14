@@ -69,7 +69,7 @@ type public Matrix(array: int[,]) =
     //        for j = 0 to this.Columns - 1 do
     //            newArray[j, i] <- array[i, j]
                 
-    //    array <- newArray
+    //    newArray
 
     (*
     public static Matrix operator * (Matrix matrix_1, Matrix matrix_2)

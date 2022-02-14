@@ -1,5 +1,4 @@
-//using MatrixLab;
-using MatrixF;
+using MatrixLab;
 using System;
 using Xunit;
 
