@@ -62,14 +62,14 @@ type public Matrix(array: int[,]) =
     static member CreateEmpty() =
         Matrix(0, 0)
 
-    member this.Transpose() =
-        let newArray = Array2D.zeroCreate this.Columns this.Rows
+    //member this.Transpose() =
+    //    let newArray = Array2D.zeroCreate this.Columns this.Rows
 
-        for i = 0 to this.Rows - 1 do
-            for j = 0 to this.Columns - 1 do
-                newArray[j, i] <- array[i, j]
+    //    for i = 0 to this.Rows - 1 do
+    //        for j = 0 to this.Columns - 1 do
+    //            newArray[j, i] <- array[i, j]
                 
-        newArray
+    //    array <- newArray
 
     (*
     public static Matrix operator * (Matrix matrix_1, Matrix matrix_2)
