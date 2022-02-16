@@ -3,19 +3,21 @@ using MatrixLab;
 
 void Test()
 {
-    using var matrix_1 = new Matrix(5000, 5000, (i, j) => i);
+    //using var a = new Matrix(new int[,] { { 3, 4 }, { 1, 2 } });
+    //using var b = new Matrix(new int[,] { { -1, 0 }, { 2, 2 } });
 
-    using var matrix_2 = new Matrix(5000, 5000, (i, j) => i);
 
-    using var matrix_3 = Matrix.CreateEmpty();
+    //var result = (2 * a + b.Transpose()).Transpose();
+    using var a = new Matrix(new int[,] { { 3, 4 }, { 1, 2 } });
+    using var b = new Matrix(new int[,] { { -1, 0 }, { 2, 2 } });
+
+
+    var result = (2 * a + b.Transpose()).Transpose() + (- 3) * b * a;
+
+    Console.WriteLine(result);
 }
 
-void M()
-{
-    Test();
-}
-
-M();
+Test();
 
 Console.WriteLine("End");
 

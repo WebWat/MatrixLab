@@ -196,7 +196,7 @@ namespace MatrixTests
                 { 1, 2, 3 },
             });
 
-            matrix.Transpose();
+            matrix = matrix.Transpose();
 
             Assert.Equal<int[,]>(new int[,]
             {

@@ -19,8 +19,7 @@ type public Matrix(array: int[,]) =
 
     member _.Columns = array.GetLength 0
 
-    member _.Array = 
-        array
+    member _.Array = array
 
     member _.Length = array.Length
 
@@ -31,7 +30,7 @@ type public Matrix(array: int[,]) =
         if m1.Columns <> m2.Columns || m1.Rows <> m2.Rows then
             raise (ArgumentException("Matrices sizes must be equals"))
 
-        let result = Matrix(m1.Rows, m1.Rows)
+        let result = Matrix (m1.Rows, m1.Rows)
 
         for i = 0 to m1.Rows - 1 do
             for j = 0 to m1.Columns - 1 do
@@ -47,53 +46,36 @@ type public Matrix(array: int[,]) =
 
         let rec loop i row  =
             if row < m2.Columns then
-                let mutable memory = 0
                 for j = 0 to m1.Columns - 1 do
-                    memory <- memory + m1[i, j] * m2[j, row]
-                result[i, row] <- memory
-                loop 0 (row + 1)
+                    result[i, row] <- result[i, row] + m1[i, j] * m2[j, row]
+                loop i (row + 1)
                 
-
         for i = 0 to m1.Rows - 1 do
             loop i 0
 
         result
 
+    static member (*) (num: int, matrix: Matrix) =
+        Matrix (Array2D.map (fun x -> x * num) matrix.Array)
+
     static member CreateEmpty() =
         Matrix(0, 0)
 
-    //member this.Transpose() =
-    //    let newArray = Array2D.zeroCreate this.Columns this.Rows
+    member this.Transpose() =
+        let newArray = Array2D.zeroCreate this.Columns this.Rows
 
-    //    for i = 0 to this.Rows - 1 do
-    //        for j = 0 to this.Columns - 1 do
-    //            newArray[j, i] <- array[i, j]
+        for i = 0 to this.Rows - 1 do
+            for j = 0 to this.Columns - 1 do
+                newArray[j, i] <- array[i, j]
                 
-    //    newArray
+        Matrix newArray
 
-    (*
-    public static Matrix operator * (Matrix matrix_1, Matrix matrix_2)
-    {
-        StringBuilder result = new();
-        
-                    for (int i = 0; i < Rows; i++)
-                    {
-                        for (int j = 0; j < Columns; j++)
-                        {
-                            if (j == 0)
-                            {
-                                result.Append("| ");
-                            }
-                            else if (j + 1 == Columns)
-                            {
-                                result.Append($"{this[i, j],-1} |");
-        
-                                break;
-                            }
-        
-                            result.Append($"{this[i, j],-10}");
-                        }
-        
-                        result.Append('\n');
-                    }
-    }*)
+    override this.ToString() =
+        let result = new StringBuilder()
+
+        for i = 0 to this.Rows - 1 do
+            for j = 0 to this.Columns - 1 do
+                result.Append($"{array[i, j]}\t") |> ignore
+            result.Append '\n' |> ignore
+
+        result.ToString()

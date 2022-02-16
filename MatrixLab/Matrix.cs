@@ -111,14 +111,10 @@ namespace MatrixLab
 
                 while (row < matrix_2.Columns)
                 {
-                    int memory = 0;
-
                     for (int j = 0; j < matrix_1.Columns; j++)
                     {
-                        memory += matrix_1[i, j] * matrix_2[j, row];
+                        result[i, row] += matrix_1[i, j] * matrix_2[j, row];
                     }
-
-                    result[i, row] = memory;
 
                     row++;
                 }
@@ -175,7 +171,7 @@ namespace MatrixLab
             return result.ToString();
         }
 
-        public void Transpose()
+        public Matrix Transpose()
         {
             int[,] newArray = new int[Columns, Rows];
 
@@ -187,7 +183,7 @@ namespace MatrixLab
                 }
             }
 
-            _array = newArray;
+            return new Matrix(newArray);
         }
 
         public void Dispose()

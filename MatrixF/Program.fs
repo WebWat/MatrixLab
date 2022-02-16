@@ -2,11 +2,11 @@
 
 
 
-let m1 = Matrix(20, 20, (fun i j -> i + j))
-let m2 = Matrix(20, 20, (fun i j -> i * j))
-let result = -m1
-let result2 = m1
+let a = Matrix (array2D [[3; 4]; [1; 2]])
+let b = Matrix (array2D [[-1; 0]; [2; 2]])
 
-printfn "test"
+let c = (2 * a + b.Transpose()).Transpose() + (-3) * b * a
+
+printfn "%s" (c.ToString())
 
 
