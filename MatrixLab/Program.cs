@@ -3,16 +3,13 @@ using MatrixLab;
 
 void Test()
 {
-    //using var a = new Matrix(new int[,] { { 3, 4 }, { 1, 2 } });
-    //using var b = new Matrix(new int[,] { { -1, 0 }, { 2, 2 } });
+    var b = new Matrix(new int[,] { { 1, 0, 5 }, { 2, 1, 1 }, { 7, 0, 3 } }, "B");
+    var a = new Matrix(new int[,] { { 1, 0, 2 }, { 3, 1, 1 }, { 2, 1, 1 } }, "A");
 
+    Console.WriteLine(b);
+    Console.WriteLine(a);
 
-    //var result = (2 * a + b.Transpose()).Transpose();
-    using var a = new Matrix(new int[,] { { 3, 4 }, { 1, 2 } });
-    using var b = new Matrix(new int[,] { { -1, 0 }, { 2, 2 } });
-
-
-    var result = (2 * a + b.Transpose()).Transpose() + (- 3) * b * a;
+    var result = (2 * a + b.Transpose()).Transpose() - 3 * b * a;
 
     Console.WriteLine(result);
 }

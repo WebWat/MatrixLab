@@ -9,4 +9,4 @@ let c = (2 * a + b.Transpose()).Transpose() + (-3) * b * a
 
 printfn "%s" (c.ToString())
 
-
+printfn "%x" 2312
