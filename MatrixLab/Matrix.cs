@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Spectre.Console;
+using System.Text;
 
 namespace MatrixLab
 {
@@ -76,12 +77,10 @@ namespace MatrixLab
 
         public static Matrix operator -(Matrix matrix)
         {
-            StringBuilder output = new();
-
             var result = new Matrix(matrix.Rows, matrix.Rows, string.Concat("-", matrix.Name));
 
             string operation = $"-{matrix.Name} = ";
-            output.Append(operation);
+            AnsiConsole.Markup($"[deeppink3]-{matrix.Name}[/] = ");
 
             for (int i = 0; i < matrix.Rows; i++)
             {
@@ -90,15 +89,15 @@ namespace MatrixLab
                     result[i, j] = -matrix[i, j];
 
                     string main = $"{matrix[i, j]} * (-1) = {result[i, j]};";
+
                     if (j == 0)
-                        output.Append($"{new string(' ', i == 0 && j == 0 ? 0 : operation.Length)}");
-                    output.Append($"{main}" +
+                        AnsiConsole.Write($"{new string(' ', i == 0 && j == 0 ? 0 : operation.Length)}");
+                    AnsiConsole.Markup($"[deeppink3]{matrix[i, j]}[/] * (-1) = [lime]{result[i, j]}[/];" +
                         $"{new string(' ', Spaces - main.Length)}");
                 }
-                output.Append("\n");
+                AnsiConsole.WriteLine();
             }
-
-            Console.WriteLine(output);
+            AnsiConsole.WriteLine();
 
             return result;
         }
@@ -113,13 +112,11 @@ namespace MatrixLab
             if (matrix_1.Columns != matrix_2.Columns || matrix_1.Rows != matrix_2.Rows)
                 throw new ArgumentException("Matrices sizes must be equals");
 
-            StringBuilder output = new();
-
             string operation = $"{matrix_1.Name} + {matrix_2.Name} = ";
-            output.Append(operation);
+            AnsiConsole.Markup($"[deeppink3]{matrix_1.Name}[/] + [blue]{matrix_2.Name}[/] = ");
 
             var result = new Matrix(matrix_1.Rows, matrix_1.Rows, 
-                string.Concat("(", matrix_1.Name, " + ", matrix_2.Name, ")"));
+                string.Concat(matrix_1.Name, " + ", matrix_2.Name));
 
             for (int i = 0; i < matrix_1.Rows; i++)
             {
@@ -129,14 +126,14 @@ namespace MatrixLab
 
                     string main = $"{matrix_1[i, j]} + {matrix_2[i, j]} = {result[i, j]};";
                     if (j == 0)
-                        output.Append($"{new string(' ', i == 0 && j == 0 ? 0 : operation.Length)}");
-                    output.Append($"{main}" +
+                        AnsiConsole.Write($"{new string(' ', i == 0 && j == 0 ? 0 : operation.Length)}");
+                    AnsiConsole.Markup($"[deeppink3]{matrix_1[i, j]}[/] + [blue]{matrix_2[i, j]}[/] " +
+                        $"= [lime]{result[i, j]}[/];" +
                         $"{new string(' ', Spaces - main.Length)}");
                 }
-                output.Append("\n");
+                AnsiConsole.WriteLine();
             }
-
-            Console.WriteLine(output);
+            AnsiConsole.WriteLine();
 
             return result;
         }
@@ -149,10 +146,9 @@ namespace MatrixLab
             var result = new Matrix(matrix_1.Rows, matrix_2.Columns,
                 string.Concat("(", matrix_1.Name, " * ", matrix_2.Name, ")"));
 
-            StringBuilder output = new();
 
             string operation = $"{matrix_1.Name} * {matrix_2.Name} = ";
-            output.Append(operation);
+            AnsiConsole.Markup($"[deeppink3]{matrix_1.Name}[/] * [blue]{matrix_2.Name}[/] = ");
 
             for (int i = 0; i < matrix_1.Rows; i++)
             {
@@ -162,29 +158,35 @@ namespace MatrixLab
                 {
                     StringBuilder main = new();
 
+                    if (row == 0)
+                        AnsiConsole.Write($"{new string(' ', i == 0 && row == 0 ? 0 : operation.Length)}");
+
                     for (int j = 0; j < matrix_1.Columns; j++)
                     {
                         result[i, row] += matrix_1[i, j] * matrix_2[j, row];
                         if (j == 0)
+                        {
                             main.Append($"{matrix_1[i, j]} * {matrix_2[j, row]}");
+                            AnsiConsole.Markup($"[deeppink3]{matrix_1[i, j]}[/] * [blue]{matrix_2[j, row]}[/]");
+                        }
                         else
+                        {
                             main.Append($" + {matrix_1[i, j]} * {matrix_2[j, row]}");
+                            AnsiConsole.Markup($" + [deeppink3]{matrix_1[i, j]}[/] * [blue]{matrix_2[j, row]}[/]");
+                        }
                     }
 
                     main.Append($" = {result[i, row]};");
+                    AnsiConsole.Markup($" = [lime]{result[i, row]}[/];");
 
-                    if (row == 0)
-                        output.Append($"{new string(' ', i == 0 && row == 0 ? 0 : operation.Length)}");
-                    output.Append($"{main}" +
-                        $"{new string(' ', SpacesForMultiply - main.Length)}");
+                    AnsiConsole.Write($"{new string(' ', SpacesForMultiply - main.Length)}");
 
                     row++;
                 }
 
-                output.Append('\n');
+                AnsiConsole.WriteLine();
             }
-
-            Console.WriteLine(output);
+            AnsiConsole.WriteLine();
 
             return result;
         }
@@ -194,10 +196,9 @@ namespace MatrixLab
             var result = new Matrix(matrix.Rows, matrix.Rows, 
                 string.Concat(x, " * ", matrix.Name));
 
-            StringBuilder output = new();
 
             string operation = $"{x} * {matrix.Name} = ";
-            output.Append(operation);
+            AnsiConsole.Markup($"{x} * [deeppink3]{matrix.Name}[/] = ");
 
             for (int i = 0; i < matrix.Rows; i++)
             {
@@ -207,14 +208,15 @@ namespace MatrixLab
 
                     string main = $"{x} * {matrix[i, j]} = {result[i, j]};";
                     if (j == 0)
-                        output.Append($"{new string(' ', i == 0 && j == 0 ? 0 : operation.Length)}");
-                    output.Append($"{main}" +
+                        AnsiConsole.Write($"{new string(' ', i == 0 && j == 0 ? 0 : operation.Length)}");
+                    AnsiConsole.Markup($"{x} * [deeppink3]{matrix[i, j]}[/] " +
+                        $"= [lime]{result[i, j]}[/];" +
                         $"{new string(' ', Spaces - main.Length)}");
                 }
-                output.Append('\n');
-            }
 
-            Console.WriteLine(output);
+                AnsiConsole.WriteLine();
+            }
+            AnsiConsole.WriteLine();
 
             return result;
         }
@@ -253,8 +255,8 @@ namespace MatrixLab
 
             StringBuilder output = new();
 
-            string operation = $"{Name}^T = ";
-            output.Append(operation);
+            string operation = $"({Name})^T = ";
+            AnsiConsole.Markup($"[deeppink3]({Name})[/]^T = ");
 
             for (int i = 0; i < Rows; i++)
             {
@@ -263,16 +265,18 @@ namespace MatrixLab
                     newArray[j, i] = _array[i, j];
 
                     string main = $"{_array[j, i]} = {_array[i, j]};";
+
                     if (j == 0)
-                        output.Append($"{new string(' ', i == 0 && j == 0 ? 0 : operation.Length)}");
-                    output.Append($"{main}" +
+                        AnsiConsole.Write($"{new string(' ', i == 0 && j == 0 ? 0 : operation.Length)}");
+                    AnsiConsole.Markup($"[deeppink3]{_array[i, j]}[/] = [lime]{_array[j, i]}[/]; " +
                         $"{new string(' ', Spaces - main.Length)}");
                 }
-                output.Append('\n');
-            }
-            Console.WriteLine(output);
 
-            return new Matrix(newArray, string.Concat(Name, "^T"));
+                AnsiConsole.WriteLine();
+            }
+            AnsiConsole.WriteLine();
+
+            return new Matrix(newArray, string.Concat("(", Name, ")", "^T"));
         }
     }
 }

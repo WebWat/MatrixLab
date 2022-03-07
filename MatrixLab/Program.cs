@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using MatrixLab;
+using Spectre.Console;
 
 void Test()
 {
@@ -9,13 +10,11 @@ void Test()
     Console.WriteLine(b);
     Console.WriteLine(a);
 
-    var result = (2 * a + b.Transpose()).Transpose() - 3 * b * a;
-
-    Console.WriteLine(result);
+    var result = ((2 * a * b.Transpose()).Transpose() - (3 * b).Transpose() + b * a).Transpose();
 }
 
 Test();
 
-Console.WriteLine("End");
+//Console.WriteLine("End");
 
 Console.ReadLine();
