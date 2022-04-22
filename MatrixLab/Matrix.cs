@@ -9,6 +9,8 @@ namespace MatrixLab
         private const int SpacesForToString = 4;
         private const int SpacesForMultiply = 35;
 
+        private static Stack<string> Alpha = new(new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N" });
+
         public int Rows
         {
             get { return _array.GetLength(0); }
@@ -77,10 +79,11 @@ namespace MatrixLab
 
         public static Matrix operator -(Matrix matrix)
         {
-            var result = new Matrix(matrix.Rows, matrix.Rows, string.Concat("-", matrix.Name));
+            string alp = Alpha.Pop();
+            var result = new Matrix(matrix.Rows, matrix.Rows, alp);
 
-            string operation = $"-{matrix.Name} = ";
-            AnsiConsole.Markup($"[deeppink3]-{matrix.Name}[/] = ");
+            string operation = $"'{alp}' => -{matrix.Name} = ";
+            AnsiConsole.Markup($"'[lime]{alp}[/]' => [deeppink3]-{matrix.Name}[/] = ");
 
             for (int i = 0; i < matrix.Rows; i++)
             {
@@ -112,11 +115,12 @@ namespace MatrixLab
             if (matrix_1.Columns != matrix_2.Columns || matrix_1.Rows != matrix_2.Rows)
                 throw new ArgumentException("Matrices sizes must be equals");
 
-            string operation = $"{matrix_1.Name} + {matrix_2.Name} = ";
-            AnsiConsole.Markup($"[deeppink3]{matrix_1.Name}[/] + [blue]{matrix_2.Name}[/] = ");
+            string alp = Alpha.Pop();
 
-            var result = new Matrix(matrix_1.Rows, matrix_1.Rows, 
-                string.Concat(matrix_1.Name, " + ", matrix_2.Name));
+            string operation = $"'{alp}' => {matrix_1.Name} + {matrix_2.Name} = ";
+            AnsiConsole.Markup($"'[lime]{alp}[/]' => [deeppink3]{matrix_1.Name}[/] + [blue]{matrix_2.Name}[/] = ");
+
+            var result = new Matrix(matrix_1.Rows, matrix_1.Rows, alp);
 
             for (int i = 0; i < matrix_1.Rows; i++)
             {
@@ -143,12 +147,13 @@ namespace MatrixLab
             if (matrix_1.Columns != matrix_2.Rows)
                 throw new ArgumentException("Error");
 
-            var result = new Matrix(matrix_1.Rows, matrix_2.Columns,
-                string.Concat("(", matrix_1.Name, " * ", matrix_2.Name, ")"));
+            string alp = Alpha.Pop();
+
+            var result = new Matrix(matrix_1.Rows, matrix_2.Columns, alp);
 
 
-            string operation = $"{matrix_1.Name} * {matrix_2.Name} = ";
-            AnsiConsole.Markup($"[deeppink3]{matrix_1.Name}[/] * [blue]{matrix_2.Name}[/] = ");
+            string operation = $"'{alp}' => {matrix_1.Name} * {matrix_2.Name} = ";
+            AnsiConsole.Markup($"'[lime]{alp}[/]' => [deeppink3]{matrix_1.Name}[/] * [blue]{matrix_2.Name}[/] = ");
 
             for (int i = 0; i < matrix_1.Rows; i++)
             {
@@ -193,12 +198,12 @@ namespace MatrixLab
 
         public static Matrix operator * (int x, Matrix matrix)
         {
-            var result = new Matrix(matrix.Rows, matrix.Rows, 
-                string.Concat(x, " * ", matrix.Name));
+            string alp = Alpha.Pop();
 
+            var result = new Matrix(matrix.Rows, matrix.Rows, alp);
 
-            string operation = $"{x} * {matrix.Name} = ";
-            AnsiConsole.Markup($"{x} * [deeppink3]{matrix.Name}[/] = ");
+            string operation = $"'{alp}' => {x} * {matrix.Name} = ";
+            AnsiConsole.Markup($"'[lime]{alp}[/]' => {x} * [deeppink3]{matrix.Name}[/] = ");
 
             for (int i = 0; i < matrix.Rows; i++)
             {
@@ -255,8 +260,10 @@ namespace MatrixLab
 
             StringBuilder output = new();
 
-            string operation = $"({Name})^T = ";
-            AnsiConsole.Markup($"[deeppink3]({Name})[/]^T = ");
+            string alp = Alpha.Pop();
+
+            string operation = $"'{alp}' => ({Name})^T = ";
+            AnsiConsole.Markup($"'[lime]{alp}[/]' => [deeppink3]({Name})[/]^T = ");
 
             for (int i = 0; i < Rows; i++)
             {
@@ -276,7 +283,55 @@ namespace MatrixLab
             }
             AnsiConsole.WriteLine();
 
-            return new Matrix(newArray, string.Concat("(", Name, ")", "^T"));
+            return new Matrix(newArray, alp);
+        }
+
+        public int Determinant()
+        {
+            if (Rows != Columns)
+                throw new ArgumentException("Error");
+
+
+            switch (Rows)
+            {
+                case 1:
+                    return _array[0, 0];
+                case 2:
+                    return _array[0, 0] * _array[1, 1] - _array[0, 1] * _array[1, 0];
+                case 3:
+                    return _array[0, 0] * _array[1, 1] * _array[2, 2] +
+                           _array[0, 1] * _array[1, 2] * _array[2, 0] +
+                           _array[0, 2] * _array[1, 0] * _array[2, 1] -
+                           _array[0, 2] * _array[1, 1] * _array[2, 0] -
+                           _array[0, 0] * _array[1, 2] * _array[2, 1] -
+                           _array[0, 1] * _array[1, 0] * _array[2, 2];
+                default:
+                    int result = 0;
+
+                    for (int i = 0; i < Columns; i++)
+                    {
+                        int value = _array[0, i];
+                        var matrix = new Matrix(Columns - 1, Columns - 1);
+                        int column = 0;
+
+                        for (int a = 1; a < Rows; a++)
+                        {
+                            for (int b = 0; b < Columns; b++)
+                            {
+                                if (b != i)
+                                {
+                                    matrix[a - 1, column] = _array[a, b];
+                                    column++;
+                                }
+                            }
+                            column = 0;
+                        }
+
+                        result += (i % 2 == 0 ? 1 : (-1)) * value * matrix.Determinant();
+                    }
+
+                    return result;
+            }
         }
     }
 }

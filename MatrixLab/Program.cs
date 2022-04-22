@@ -4,13 +4,10 @@ using Spectre.Console;
 
 void Test()
 {
-    var b = new Matrix(new int[,] { { 1, 0, 5 }, { 2, 1, 1 }, { 7, 0, 3 } }, "B");
-    var a = new Matrix(new int[,] { { 1, 0, 2 }, { 3, 1, 1 }, { 2, 1, 1 } }, "A");
+    var b = new Matrix(new int[,] { { 2, 3, 7, 10, 13 }, { 1, 2, 3, 4, 5 }, { 3, 5, 11, 16, 21 }, { 2, -7, 7, 7, 2 }, { 1, 4, 5, 3, 10 } }, "B");
 
     Console.WriteLine(b);
-    Console.WriteLine(a);
-
-    var result = ((2 * a * b.Transpose()).Transpose() - (3 * b).Transpose() + b * a).Transpose();
+    Console.WriteLine(b.Determinant());
 }
 
 Test();
