@@ -200,12 +200,78 @@ namespace MatrixLab
         }
 
         // TODO: finish
-        public Matrix Inverse()
+        public (double, Matrix) Inverse()
         {
             if (Rows != Columns)
                 throw new ArgumentException("The matrix must be square");
 
-            return this;
+            var result = new Matrix(this, string.Concat(Name, "^(-1)"));
+
+            result = result.Minor();
+
+            for (int i = 0; i < Rows; i++)
+            {
+                for (int j = 0; j < Columns; j++)
+                {
+                    if ((i + j) % 2 != 0)
+                        result[i, j] = -result[i, j];
+                }
+            }
+
+            result = result.Transpose();
+
+            return (1d / Determinant(), result);
+        }
+
+        public Matrix Minor()
+        {
+            if (Rows != Columns)
+                throw new ArgumentException("The matrix must be square");
+
+            switch (Rows)
+            {
+                case 1:
+                    return new Matrix(this, string.Concat(Name, "^M"));
+                case 2:
+                    return new Matrix(new int[,]
+                    {
+                        { _array[1, 1], _array[1, 0] },
+                        { _array[0, 1], _array[0, 0] }
+                    }, string.Concat(Name, "^M"));
+                default:
+                    var result = new Matrix(Columns, Columns, string.Concat(Name, "^M"));
+
+                    for (int i = 0; i < Rows; i++)
+                    {
+                        for (int j = 0; j < Columns; j++)
+                        {
+                            var matrix = new Matrix(Columns - 1, Columns - 1);
+                            int column = 0, row = 0;
+
+                            for (int a = 0; a < Rows; a++)
+                            {
+                                for (int b = 0; b < Columns; b++)
+                                {
+                                    if (a != i && b != j)
+                                    {
+                                        matrix[row, column] = _array[a, b];
+                                        column++;
+                                    }
+                                }
+
+                                if (column != 0)
+                                    row++;
+
+                                column = 0;
+
+                            }
+
+                            result[i, j] = matrix.Determinant();
+                        }
+                    }
+
+                    return result;
+            }
         }
 
         public int Determinant()

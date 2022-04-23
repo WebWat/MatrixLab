@@ -294,20 +294,36 @@ namespace MatrixTests
             Assert.Throws<ArgumentException>(() => matrix.Determinant());
         }
 
-        //[Fact]
-        //public void InverseGet()
-        //{
-        //    var matrix = new Matrix(new int[,]
-        //    {
-        //        { 1, 2 },
-        //        { 3, 4 }
-        //    });
+        [Fact]
+        public void InverseRank2()
+        {
+            var matrix = new Matrix(new int[,]
+            {
+                { 1, 2 },
+                { 3, 4 }
+            });
 
-        //    var (a, b) = matrix.Inverse();
+            var result = matrix.Inverse();
 
-        //    Assert.Equal(-0.5, a);
-        //    Assert.Equal(b, new int[,] { 4, -2});
-        //}
+            Assert.Equal(-0.5, result.Item1);
+            Assert.Equal<int[,]>(new int[,] { { 4, -2 }, { -3, 1 } }, result.Item2);
+        }
+
+        [Fact]
+        public void InverseRank3()
+        {
+            var matrix = new Matrix(new int[,]
+            {
+                { 2, 5, 7 },
+                { 6, 3, 4 },
+                { 5, -2, -3 }
+            });
+
+            var result = matrix.Inverse();
+
+            Assert.Equal(-1, result.Item1);
+            Assert.Equal<int[,]>(new int[,] { { -1, 1, -1 }, { 38, -41, 34 }, { -27, 29, -24} }, result.Item2);
+        }
 
         [Fact]
         public void InverseThrow()
@@ -320,6 +336,48 @@ namespace MatrixTests
             });
 
             Assert.Throws<ArgumentException>(() => matrix.Inverse());
+        }
+
+        [Fact]
+        public void MinorRank2()
+        {
+            var matrix = new Matrix(new int[,]
+            {
+                { 1, 2 },
+                { 3, 4 }
+            });
+
+            var result = matrix.Minor();
+
+            Assert.Equal<int[,]>(new int[,] { { 4, 3 }, { 2, 1 } }, result);
+        }
+
+        [Fact]
+        public void MinorRank3()
+        {
+            var matrix = new Matrix(new int[,]
+            {
+                { 2, 5, 7 },
+                { 6, 3, 4 },
+                { 5, -2, -3 }
+            });
+
+            var result = matrix.Minor();
+
+            Assert.Equal<int[,]>(new int[,] { { -1, -38, -27 }, { -1, -41, -29 }, { -1, -34, -24} }, result);
+        }
+
+        [Fact]
+        public void MinorThrow()
+        {
+            var matrix = new Matrix(new int[,]
+            {
+                { 2, 3, 7, 10, 13 },
+                { 1, 2, 3, 4, 5 },
+                { 3, 5, 11, 16, 21 }
+            });
+
+            Assert.Throws<ArgumentException>(() => matrix.Minor());
         }
     }
 }
