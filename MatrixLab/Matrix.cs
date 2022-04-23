@@ -4,9 +4,7 @@ namespace MatrixLab
 {
     public sealed class Matrix
     {
-        private const int Spaces = 20;
-        private const int SpacesForToString = 4;
-        private const int SpacesForMultiply = 35;
+        private const int SpacesForToString = 7;
 
         public int Rows
         {
@@ -76,29 +74,15 @@ namespace MatrixLab
 
         public static Matrix operator -(Matrix matrix)
         {
-            StringBuilder output = new();
-
             var result = new Matrix(matrix.Rows, matrix.Rows, string.Concat("-", matrix.Name));
-
-            string operation = $"-{matrix.Name} = ";
-            output.Append(operation);
 
             for (int i = 0; i < matrix.Rows; i++)
             {
                 for (int j = 0; j < matrix.Columns; j++)
                 {
                     result[i, j] = -matrix[i, j];
-
-                    string main = $"{matrix[i, j]} * (-1) = {result[i, j]};";
-                    if (j == 0)
-                        output.Append($"{new string(' ', i == 0 && j == 0 ? 0 : operation.Length)}");
-                    output.Append($"{main}" +
-                        $"{new string(' ', Spaces - main.Length)}");
                 }
-                output.Append("\n");
             }
-
-            Console.WriteLine(output);
 
             return result;
         }
@@ -113,11 +97,6 @@ namespace MatrixLab
             if (matrix_1.Columns != matrix_2.Columns || matrix_1.Rows != matrix_2.Rows)
                 throw new ArgumentException("Matrices sizes must be equals");
 
-            StringBuilder output = new();
-
-            string operation = $"{matrix_1.Name} + {matrix_2.Name} = ";
-            output.Append(operation);
-
             var result = new Matrix(matrix_1.Rows, matrix_1.Rows, 
                 string.Concat("(", matrix_1.Name, " + ", matrix_2.Name, ")"));
 
@@ -126,17 +105,8 @@ namespace MatrixLab
                 for (int j = 0; j < matrix_1.Columns; j++)
                 {
                     result[i, j] = matrix_1[i, j] + matrix_2[i, j];
-
-                    string main = $"{matrix_1[i, j]} + {matrix_2[i, j]} = {result[i, j]};";
-                    if (j == 0)
-                        output.Append($"{new string(' ', i == 0 && j == 0 ? 0 : operation.Length)}");
-                    output.Append($"{main}" +
-                        $"{new string(' ', Spaces - main.Length)}");
                 }
-                output.Append("\n");
             }
-
-            Console.WriteLine(output);
 
             return result;
         }
@@ -144,15 +114,11 @@ namespace MatrixLab
         public static Matrix operator * (Matrix matrix_1, Matrix matrix_2)
         {
             if (matrix_1.Columns != matrix_2.Rows)
-                throw new ArgumentException("Error");
+                throw new ArgumentException("The columns of the first matrix " +
+                    "must be equal to the rows of the second matrix");
 
             var result = new Matrix(matrix_1.Rows, matrix_2.Columns,
                 string.Concat("(", matrix_1.Name, " * ", matrix_2.Name, ")"));
-
-            StringBuilder output = new();
-
-            string operation = $"{matrix_1.Name} * {matrix_2.Name} = ";
-            output.Append(operation);
 
             for (int i = 0; i < matrix_1.Rows; i++)
             {
@@ -160,31 +126,15 @@ namespace MatrixLab
 
                 while (row < matrix_2.Columns)
                 {
-                    StringBuilder main = new();
-
                     for (int j = 0; j < matrix_1.Columns; j++)
                     {
                         result[i, row] += matrix_1[i, j] * matrix_2[j, row];
-                        if (j == 0)
-                            main.Append($"{matrix_1[i, j]} * {matrix_2[j, row]}");
-                        else
-                            main.Append($" + {matrix_1[i, j]} * {matrix_2[j, row]}");
                     }
-
-                    main.Append($" = {result[i, row]};");
-
-                    if (row == 0)
-                        output.Append($"{new string(' ', i == 0 && row == 0 ? 0 : operation.Length)}");
-                    output.Append($"{main}" +
-                        $"{new string(' ', SpacesForMultiply - main.Length)}");
 
                     row++;
                 }
 
-                output.Append('\n');
             }
-
-            Console.WriteLine(output);
 
             return result;
         }
@@ -194,27 +144,14 @@ namespace MatrixLab
             var result = new Matrix(matrix.Rows, matrix.Rows, 
                 string.Concat(x, " * ", matrix.Name));
 
-            StringBuilder output = new();
-
-            string operation = $"{x} * {matrix.Name} = ";
-            output.Append(operation);
 
             for (int i = 0; i < matrix.Rows; i++)
             {
                 for (int j = 0; j < matrix.Columns; j++)
                 {
                     result[i, j] = x * matrix[i, j];
-
-                    string main = $"{x} * {matrix[i, j]} = {result[i, j]};";
-                    if (j == 0)
-                        output.Append($"{new string(' ', i == 0 && j == 0 ? 0 : operation.Length)}");
-                    output.Append($"{main}" +
-                        $"{new string(' ', Spaces - main.Length)}");
                 }
-                output.Append('\n');
             }
-
-            Console.WriteLine(output);
 
             return result;
         }
@@ -251,28 +188,71 @@ namespace MatrixLab
         {
             int[,] newArray = new int[Columns, Rows];
 
-            StringBuilder output = new();
-
-            string operation = $"{Name}^T = ";
-            output.Append(operation);
-
             for (int i = 0; i < Rows; i++)
             {
                 for (int j = 0; j < Columns; j++)
                 {
                     newArray[j, i] = _array[i, j];
-
-                    string main = $"{_array[j, i]} = {_array[i, j]};";
-                    if (j == 0)
-                        output.Append($"{new string(' ', i == 0 && j == 0 ? 0 : operation.Length)}");
-                    output.Append($"{main}" +
-                        $"{new string(' ', Spaces - main.Length)}");
                 }
-                output.Append('\n');
             }
-            Console.WriteLine(output);
 
             return new Matrix(newArray, string.Concat(Name, "^T"));
+        }
+
+        // TODO: finish
+        public Matrix Inverse()
+        {
+            if (Rows != Columns)
+                throw new ArgumentException("The matrix must be square");
+
+            return this;
+        }
+
+        public int Determinant()
+        {
+            if (Rows != Columns)
+                throw new ArgumentException("The matrix must be square");
+
+            switch (Rows)
+            {
+                case 1:
+                    return _array[0, 0];
+                case 2:
+                    return _array[0, 0] * _array[1, 1] - _array[0, 1] * _array[1, 0];
+                case 3:
+                    return _array[0, 0] * _array[1, 1] * _array[2, 2] +
+                           _array[0, 1] * _array[1, 2] * _array[2, 0] +
+                           _array[0, 2] * _array[1, 0] * _array[2, 1] -
+                           _array[0, 2] * _array[1, 1] * _array[2, 0] -
+                           _array[0, 0] * _array[1, 2] * _array[2, 1] -
+                           _array[0, 1] * _array[1, 0] * _array[2, 2];
+                default:
+                    int result = 0;
+
+                    for (int i = 0; i < Columns; i++)
+                    {
+                        int value = _array[0, i];
+                        var matrix = new Matrix(Columns - 1, Columns - 1);
+                        int column = 0;
+
+                        for (int a = 1; a < Rows; a++)
+                        {
+                            for (int b = 0; b < Columns; b++)
+                            {
+                                if (b != i)
+                                {
+                                    matrix[a - 1, column] = _array[a, b];
+                                    column++;
+                                }
+                            }
+                            column = 0;
+                        }
+
+                        result += (i % 2 == 0 ? 1 : (-1)) * value * matrix.Determinant();
+                    }
+
+                    return result;
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ void Test()
     Console.WriteLine(b);
     Console.WriteLine(a);
 
-    var result = (2 * a + b.Transpose()).Transpose() - 3 * b * a;
+    var result = ((2 * a + b.Transpose()).Transpose() - 3 * b * a).Determinant();
 
     Console.WriteLine(result);
 }

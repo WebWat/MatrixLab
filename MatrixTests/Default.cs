@@ -124,8 +124,8 @@ namespace MatrixTests
 
             Assert.Equal<int[,]>(new int[,]
             {
-                { 19, 22},
-                { 43, 50}
+                { 19, 22 },
+                { 43, 50 }
             }, matrix_1 * matrix_2);
         }
 
@@ -204,6 +204,122 @@ namespace MatrixTests
                 { 1, 2, 2 },
                 { 9, 3, 3 },
             }, matrix);
+        }
+
+        [Fact]
+        public void DeterminantRank1()
+        {
+            var matrix = new Matrix(new int[,]
+            {
+                { 1 },
+            });
+
+            var result = matrix.Determinant();
+
+            Assert.Equal(1, result);
+        }
+
+        [Fact]
+        public void DeterminantRank2()
+        {
+            var matrix = new Matrix(new int[,]
+            {
+                { 1, 3 },
+                { 4, 2 }
+            });
+
+            var result = matrix.Determinant();
+
+            Assert.Equal(-10, result);
+        }
+
+        [Fact]
+        public void DeterminantRank3()
+        {
+            var matrix = new Matrix(new int[,]
+            {
+                { 1, 3, 9 },
+                { 4, 2, 0 },
+                { 7, 7, 7 }
+            });
+
+            var result = matrix.Determinant();
+
+            Assert.Equal(56, result);
+        }
+
+        [Fact]
+        public void DeterminantRank4()
+        {
+            var matrix = new Matrix(new int[,]
+            {
+                { 3, -7, 1, 4 },
+                { 6, 2, -1, 8 },
+                { -9, 5, 7, -3 },
+                { -2, -6, -5, 0 }
+            });
+
+            var result = matrix.Determinant();
+
+            Assert.Equal(3632, result);
+        }
+
+        [Fact]
+        public void DeterminantRank5()
+        {
+            var matrix = new Matrix(new int[,]
+            {
+                { 2, 3, 7, 10, 13 },
+                { 1, 2, 3, 4, 5 },
+                { 3, 5, 11, 16, 21 },
+                { 2, -7, 7, 7, 2 },
+                { 1, 4, 5, 3, 10 }
+            });
+
+            var result = matrix.Determinant();
+
+            Assert.Equal(-52, result);
+        }
+
+        [Fact]
+        public void DeterminantThrow()
+        {
+            var matrix = new Matrix(new int[,]
+            {
+                { 2, 3, 7, 10, 13 },
+                { 1, 2, 3, 4, 5 },
+                { 3, 5, 11, 16, 21 }
+            });
+
+            Assert.Throws<ArgumentException>(() => matrix.Determinant());
+        }
+
+        //[Fact]
+        //public void InverseGet()
+        //{
+        //    var matrix = new Matrix(new int[,]
+        //    {
+        //        { 1, 2 },
+        //        { 3, 4 }
+        //    });
+
+        //    var (a, b) = matrix.Inverse();
+
+        //    Assert.Equal(-0.5, a);
+        //    Assert.Equal(b, new int[,] { 4, -2});
+        //}
+
+        [Fact]
+        public void InverseThrow()
+        {
+            var matrix = new Matrix(new int[,]
+            {
+                { 2, 3, 7, 10, 13 },
+                { 1, 2, 3, 4, 5 },
+                { 3, 5, 11, 16, 21 }
+            });
+
+            Assert.Throws<ArgumentException>(() => matrix.Inverse());
         }
     }
 }

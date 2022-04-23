@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MatrixF\MatrixF.fsproj" />
     <ProjectReference Include="..\MatrixLab\MatrixLab.csproj" />
   </ItemGroup>
 
