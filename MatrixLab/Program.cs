@@ -1,20 +1,12 @@
 ﻿using System.Diagnostics;
 using MatrixLab;
 
-void Test()
-{
-    var a = new Matrix(new int[,] { { 1, 2 }, { 3, 4 } }, "A");
+Random ran = new Random();
+//var a = new Matrix(new double[,] { { 2, 2, 8, 3, 9 }, { 4, 8, 9, 39, 39 }, { 3, 8, 2, 6, 1 }, { 2, 8, 47, -3, 32 } });
+var a = new Matrix(new double[,] { { 2, 3, 1 }, { 2, 3, 1 } });
 
-    Console.WriteLine(a);
+var result = Matrix.Gauss(a);
 
-    var result = a.Inverse();
-
-    Console.WriteLine(result.Item1);
-    Console.WriteLine(result.Item2);
-}
-
-Test();
-
-Console.WriteLine("End");
+Console.WriteLine(result);
 
 Console.ReadLine();

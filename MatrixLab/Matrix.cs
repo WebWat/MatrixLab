@@ -4,7 +4,7 @@ namespace MatrixLab
 {
     public sealed class Matrix
     {
-        private const int SpacesForToString = 7;
+        private const int SpacesForToString = 20;
 
         public int Rows
         {
@@ -18,8 +18,8 @@ namespace MatrixLab
 
         public string Name { get; set; } = "NONE";
 
-        private int[,] _array;
-        public int[,] Array
+        private double[,] _array;
+        public double[,] Array
         {
             get { return _array; }
         }
@@ -29,7 +29,7 @@ namespace MatrixLab
             get { return _array.Length; }
         }
 
-        public Matrix(int[,] array, string name = default)
+        public Matrix(double[,] array, string name = default)
         {
             _array = array;
             Name = name == default ? Name : name;
@@ -37,13 +37,13 @@ namespace MatrixLab
 
         public Matrix(int row, int column, string name = default)
         {
-            _array = new int[row, column];
+            _array = new double[row, column];
             Name = name == default ? Name : name;
         }
 
-        public Matrix(int row, int column, Func<int, int, int> func, string name = default)
+        public Matrix(int row, int column, Func<int, int, double> func, string name = default)
         {
-            _array = new int[row, column];
+            _array = new double[row, column];
             Name = name == default ? Name : name;
 
             for (int i = 0; i < row; i++)
@@ -55,26 +55,40 @@ namespace MatrixLab
             }
         }
 
-        public int this[int row, int column]
+        public double this[int row, int column]
         {
             get { return _array[row, column]; }
             set { _array[row, column] = value; }
         }
 
-
-        public static implicit operator int[,](Matrix matrix)
+        public static implicit operator double[,](Matrix matrix)
         {
             return matrix.Array;
         }
 
-        public static implicit operator Matrix(int[,] array)
+        public static implicit operator Matrix(double[,] array)
         {
             return new Matrix(array);
         }
 
+        public static implicit operator Matrix(int[,] array)
+        {
+            double[,] newArray = new double[array.GetLength(0), array.GetLength(1)];
+
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(1); j++)
+                {
+                    newArray[i, j] = array[i, j];
+                }
+            }
+
+            return new Matrix(newArray);
+        }
+
         public static Matrix operator -(Matrix matrix)
         {
-            var result = new Matrix(matrix.Rows, matrix.Rows, string.Concat("-", matrix.Name));
+            var result = new Matrix(matrix.Rows, matrix.Rows, matrix.Name);
 
             for (int i = 0; i < matrix.Rows; i++)
             {
@@ -97,8 +111,7 @@ namespace MatrixLab
             if (matrix_1.Columns != matrix_2.Columns || matrix_1.Rows != matrix_2.Rows)
                 throw new ArgumentException("Matrices sizes must be equals");
 
-            var result = new Matrix(matrix_1.Rows, matrix_1.Rows, 
-                string.Concat("(", matrix_1.Name, " + ", matrix_2.Name, ")"));
+            var result = new Matrix(matrix_1.Rows, matrix_1.Rows);
 
             for (int i = 0; i < matrix_1.Rows; i++)
             {
@@ -117,8 +130,7 @@ namespace MatrixLab
                 throw new ArgumentException("The columns of the first matrix " +
                     "must be equal to the rows of the second matrix");
 
-            var result = new Matrix(matrix_1.Rows, matrix_2.Columns,
-                string.Concat("(", matrix_1.Name, " * ", matrix_2.Name, ")"));
+            var result = new Matrix(matrix_1.Rows, matrix_2.Columns);
 
             for (int i = 0; i < matrix_1.Rows; i++)
             {
@@ -139,10 +151,9 @@ namespace MatrixLab
             return result;
         }
 
-        public static Matrix operator * (int x, Matrix matrix)
+        public static Matrix operator * (double x, Matrix matrix)
         {
-            var result = new Matrix(matrix.Rows, matrix.Rows, 
-                string.Concat(x, " * ", matrix.Name));
+            var result = new Matrix(matrix.Rows, matrix.Rows, matrix.Name);
 
 
             for (int i = 0; i < matrix.Rows; i++)
@@ -172,7 +183,7 @@ namespace MatrixLab
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    string main = $"{this[i, j]}";
+                    string main = $"{this[i, j]:f4}";
                     if (j == 0)
                         result.Append($"{new string(' ', i == 0 && j == 0 ? 0 : operation.Length)}");
                     result.Append($"{main}" +
@@ -186,7 +197,7 @@ namespace MatrixLab
 
         public Matrix Transpose()
         {
-            int[,] newArray = new int[Columns, Rows];
+            double[,] newArray = new double[Columns, Rows];
 
             for (int i = 0; i < Rows; i++)
             {
@@ -196,16 +207,15 @@ namespace MatrixLab
                 }
             }
 
-            return new Matrix(newArray, string.Concat(Name, "^T"));
+            return new Matrix(newArray, Name);
         }
 
-        // TODO: finish
         public (double, Matrix) Inverse()
         {
             if (Rows != Columns)
                 throw new ArgumentException("The matrix must be square");
 
-            var result = new Matrix(this, string.Concat(Name, "^(-1)"));
+            var result = new Matrix(this, Name);
 
             result = result.Minor();
 
@@ -231,15 +241,15 @@ namespace MatrixLab
             switch (Rows)
             {
                 case 1:
-                    return new Matrix(this, string.Concat(Name, "^M"));
+                    return new Matrix(this, Name);
                 case 2:
-                    return new Matrix(new int[,]
+                    return new Matrix(new double[,]
                     {
                         { _array[1, 1], _array[1, 0] },
                         { _array[0, 1], _array[0, 0] }
-                    }, string.Concat(Name, "^M"));
+                    }, Name);
                 default:
-                    var result = new Matrix(Columns, Columns, string.Concat(Name, "^M"));
+                    var result = new Matrix(Columns, Columns, Name);
 
                     for (int i = 0; i < Rows; i++)
                     {
@@ -263,7 +273,6 @@ namespace MatrixLab
                                     row++;
 
                                 column = 0;
-
                             }
 
                             result[i, j] = matrix.Determinant();
@@ -274,7 +283,25 @@ namespace MatrixLab
             }
         }
 
-        public int Determinant()
+        public Matrix PowN(uint n)
+        {
+            if (Rows != Columns)
+                throw new ArgumentException("The matrix must be square");
+
+            if (n == 0)
+                return new Matrix(Rows, Columns, (_, _) => 1, Name);
+
+            var result = new Matrix(this, Name);
+
+            for (int i = 1; i < n; i++)
+            {
+                result *= this;
+            }
+
+            return result;
+        }
+
+        public double Determinant()
         {
             if (Rows != Columns)
                 throw new ArgumentException("The matrix must be square");
@@ -293,11 +320,11 @@ namespace MatrixLab
                            _array[0, 0] * _array[1, 2] * _array[2, 1] -
                            _array[0, 1] * _array[1, 0] * _array[2, 2];
                 default:
-                    int result = 0;
+                    double result = 0;
 
                     for (int i = 0; i < Columns; i++)
                     {
-                        int value = _array[0, i];
+                        double value = _array[0, i];
                         var matrix = new Matrix(Columns - 1, Columns - 1);
                         int column = 0;
 
@@ -317,8 +344,180 @@ namespace MatrixLab
                         result += (i % 2 == 0 ? 1 : (-1)) * value * matrix.Determinant();
                     }
 
-                    return result;
+                    return result;             
             }
+        }
+
+        public static Matrix MMR(Matrix a, Matrix b)
+        {
+            if (a.Rows != a.Columns || b.Rows > 1 || a.Columns != b.Columns)
+                throw new ArgumentException("Error");
+
+            var (n, result) = a.Inverse();
+
+            return b * (n * result);
+        }
+
+        public static Matrix Gauss(Matrix a)
+        {
+            double temp = 0;
+            int inc = 0;
+
+            int n = -1;
+
+            while (++n < a.Rows)
+            {
+                temp = a[n, n];
+
+                Console.WriteLine($"({n + 1}) / {temp}");
+
+                for (int i = inc; i < a.Columns; i++)
+                {
+                    a[n, i] /= temp;
+                }
+
+                Console.WriteLine(a);
+
+                for (int i = 0; i < a.Rows; i++)
+                {
+                    temp = a[i, n];
+
+                    Console.WriteLine($"({i + 1}) - ({n + 1}) * {temp}");
+
+                    for (int j = inc; j < a.Columns; j++)
+                    {
+                        if (n == i)
+                            continue;
+
+                        a[i, j] -= a[n, j] * temp;
+                    }
+
+                    Console.WriteLine(a);
+                }
+
+                inc++;
+            }
+
+            var result = new double[a.Rows, 1];
+
+            for (int i = 0; i < a.Rows; i++)
+            {
+                result[i, 0] = a[i, a.Columns - 1];
+            }
+
+            return new Matrix(result);
+            #region 2
+            //Console.WriteLine("1/x");
+            //temp = a[0, 0];
+
+            //// 1/x
+            //for (int i = 0; i < a.Columns; i++)
+            //{
+            //    a[0, i] /= temp;
+            //}
+
+            //Console.WriteLine(a);
+            //Console.WriteLine("2-1*x");
+
+
+            //temp = a[1, 0];
+
+            //// 2-1*x
+            //for (int i = 0; i < a.Columns; i++)
+            //{
+            //    a[1, i] -= a[0, i] * temp;
+            //}
+
+            //Console.WriteLine(a);
+            //Console.WriteLine("3-1*x");
+
+
+            //temp = a[2, 0];
+
+            //// 3-1*x
+            //for (int i = 0; i < a.Columns; i++)
+            //{
+            //    a[2, i] -= a[0, i] * temp;
+            //}
+
+            //Console.WriteLine(a);
+            //Console.WriteLine("2/x");
+
+
+            //temp = a[1, 1];
+
+            //// 2/x
+            //for (int i = 1; i < a.Columns; i++)
+            //{
+            //    a[1, i] /= temp;
+            //}
+
+            //Console.WriteLine(a);
+            //Console.WriteLine("1-2*x");
+
+
+            //temp = a[0, 1];
+
+            //// 1-2*x
+            //for (int i = 1; i < a.Columns; i++)
+            //{
+            //    a[0, i] -= a[1, i] * temp;
+            //}
+
+            //Console.WriteLine(a);
+            //Console.WriteLine("3-2*x");
+
+
+            //temp = a[2, 1];
+
+            //// 3-2*x
+            //for (int i = 1; i < a.Columns; i++)
+            //{
+            //    a[2, i] -= a[1, i] * temp;
+            //}
+
+            //Console.WriteLine(a);
+            //Console.WriteLine("3/x");
+
+
+            //temp = a[2, 2];
+
+            //// 3/x
+            //for (int i = 2; i < a.Columns; i++)
+            //{
+            //    a[2, i] /= temp;
+            //}
+
+            //Console.WriteLine(a);
+            //Console.WriteLine("1-3*x");
+
+
+            //temp = a[0, 2];
+
+            //// 1-3*x
+
+            //for (int i = 2; i < a.Columns; i++)
+            //{
+            //    a[0, i] -= a[2, i] * temp;
+            //}
+
+            //Console.WriteLine(a);
+            //Console.WriteLine("2-3*x");
+
+
+            //temp = a[1, 2];
+
+            //// 2-3*x
+
+            //for (int i = 2; i < a.Columns; i++)
+            //{
+            //    a[1, i] -= a[2, i] * temp;
+            //}
+
+            //Console.WriteLine(a);
+
+            //return new Matrix(new double[,] { { a[0, 3] }, { a[1, 3] }, { a[2, 3] } });
+            #endregion
         }
     }
 }
