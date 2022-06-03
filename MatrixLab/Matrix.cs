@@ -371,6 +371,32 @@ namespace MatrixLab
 
                 Console.WriteLine($"({n + 1}) / {temp}");
 
+                if (temp == 0)
+                {
+                    for (int i = 0; i < a.Rows; i++)
+                    {
+                        int argsCount = 0;
+
+                        for (int j = 0; j < a.Columns; j++)
+                        {
+                            if (j == a.Columns - 1)
+                            {
+                                if (a[i, j] != 0)
+                                {
+                                    if (argsCount == 0)
+                                        throw new Exception("Нет решений!");
+                                }
+                                break;
+                            }
+
+                            if (a[i, j] != 0)
+                                argsCount++;
+                        }
+                    }
+
+                    throw new Exception("Множество решений!");
+                }
+
                 for (int i = inc; i < a.Columns; i++)
                 {
                     a[n, i] /= temp;
@@ -405,119 +431,7 @@ namespace MatrixLab
                 result[i, 0] = a[i, a.Columns - 1];
             }
 
-            return new Matrix(result);
-            #region 2
-            //Console.WriteLine("1/x");
-            //temp = a[0, 0];
-
-            //// 1/x
-            //for (int i = 0; i < a.Columns; i++)
-            //{
-            //    a[0, i] /= temp;
-            //}
-
-            //Console.WriteLine(a);
-            //Console.WriteLine("2-1*x");
-
-
-            //temp = a[1, 0];
-
-            //// 2-1*x
-            //for (int i = 0; i < a.Columns; i++)
-            //{
-            //    a[1, i] -= a[0, i] * temp;
-            //}
-
-            //Console.WriteLine(a);
-            //Console.WriteLine("3-1*x");
-
-
-            //temp = a[2, 0];
-
-            //// 3-1*x
-            //for (int i = 0; i < a.Columns; i++)
-            //{
-            //    a[2, i] -= a[0, i] * temp;
-            //}
-
-            //Console.WriteLine(a);
-            //Console.WriteLine("2/x");
-
-
-            //temp = a[1, 1];
-
-            //// 2/x
-            //for (int i = 1; i < a.Columns; i++)
-            //{
-            //    a[1, i] /= temp;
-            //}
-
-            //Console.WriteLine(a);
-            //Console.WriteLine("1-2*x");
-
-
-            //temp = a[0, 1];
-
-            //// 1-2*x
-            //for (int i = 1; i < a.Columns; i++)
-            //{
-            //    a[0, i] -= a[1, i] * temp;
-            //}
-
-            //Console.WriteLine(a);
-            //Console.WriteLine("3-2*x");
-
-
-            //temp = a[2, 1];
-
-            //// 3-2*x
-            //for (int i = 1; i < a.Columns; i++)
-            //{
-            //    a[2, i] -= a[1, i] * temp;
-            //}
-
-            //Console.WriteLine(a);
-            //Console.WriteLine("3/x");
-
-
-            //temp = a[2, 2];
-
-            //// 3/x
-            //for (int i = 2; i < a.Columns; i++)
-            //{
-            //    a[2, i] /= temp;
-            //}
-
-            //Console.WriteLine(a);
-            //Console.WriteLine("1-3*x");
-
-
-            //temp = a[0, 2];
-
-            //// 1-3*x
-
-            //for (int i = 2; i < a.Columns; i++)
-            //{
-            //    a[0, i] -= a[2, i] * temp;
-            //}
-
-            //Console.WriteLine(a);
-            //Console.WriteLine("2-3*x");
-
-
-            //temp = a[1, 2];
-
-            //// 2-3*x
-
-            //for (int i = 2; i < a.Columns; i++)
-            //{
-            //    a[1, i] -= a[2, i] * temp;
-            //}
-
-            //Console.WriteLine(a);
-
-            //return new Matrix(new double[,] { { a[0, 3] }, { a[1, 3] }, { a[2, 3] } });
-            #endregion
+            return new Matrix(result);          
         }
     }
 }
