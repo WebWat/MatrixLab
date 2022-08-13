@@ -10,7 +10,7 @@ namespace MatrixTests
         public void GenerateFunc()
         {
             var matrix = new Matrix(2, 2, (i, j) => i + j);
-            Assert.Equal<int[,]>(new int[,]
+            Assert.Equal<double[,]>(new double[,]
             {
                 { 0, 1 },
                 { 1, 2 }
@@ -20,19 +20,19 @@ namespace MatrixTests
         [Fact]
         public void SumSquare()
         {
-            var matrix_1 = new Matrix(new int[,]
+            var matrix_1 = new Matrix(new double[,]
             {
                 { 0, 1 },
                 { 1, 2 }
             });
 
-            var matrix_2 = new Matrix(new int[,]
+            var matrix_2 = new Matrix(new double[,]
             {
                 { 0, 1 },
                 { 1, 2 }
             });
 
-            Assert.Equal<int[,]>(new int[,]
+            Assert.Equal<double[,]>(new double[,]
             {
                 { 0, 2 },
                 { 2, 4 }
@@ -42,13 +42,13 @@ namespace MatrixTests
         [Fact]
         public void SumThrow()
         {
-            var matrix_1 = new Matrix(new int[,]
+            var matrix_1 = new Matrix(new double[,]
             {
                 { 0, 1, 9 },
                 { 1, 2, 0 }
             });
 
-            var matrix_2 = new Matrix(new int[,]
+            var matrix_2 = new Matrix(new double[,]
             {
                 { 0, 1 },
                 { 1, 2 }
@@ -61,20 +61,20 @@ namespace MatrixTests
         [Fact]
         public void MultiplyFirstWide()
         {
-            var matrix_1 = new Matrix(new int[,]
+            var matrix_1 = new Matrix(new double[,]
             {
                 { 1, 2, 1 },
                 { 0, 1, 2 }
             });
 
-            var matrix_2 = new Matrix(new int[,]
+            var matrix_2 = new Matrix(new double[,]
             {
                 { 1, 0 },
                 { 0, 1 },
                 { 1, 1 }
             });
 
-            Assert.Equal<int[,]>(new int[,]
+            Assert.Equal<double[,]>(new double[,]
             {
                 { 2, 3 },
                 { 2, 3 }
@@ -85,20 +85,20 @@ namespace MatrixTests
         [Fact]
         public void MultiplyFirstTall()
         {
-            var matrix_1 = new Matrix(new int[,]
+            var matrix_1 = new Matrix(new double[,]
             {
                 { 1, 0 },
                 { 0, 1 },
                 { 1, 1 }
             });
 
-            var matrix_2 = new Matrix(new int[,]
+            var matrix_2 = new Matrix(new double[,]
             {
                 { 1, 2, 1 },
                 { 0, 1, 2 }
             });
 
-            Assert.Equal<int[,]>(new int[,]
+            Assert.Equal<double[,]>(new double[,]
             {
                 { 1, 2, 1 },
                 { 0, 1, 2 },
@@ -110,19 +110,19 @@ namespace MatrixTests
         [Fact]
         public void MultiplySquare()
         {
-            var matrix_1 = new Matrix(new int[,]
+            var matrix_1 = new Matrix(new double[,]
             {
                 { 1, 2 },
                 { 3, 4 },
             });
 
-            var matrix_2 = new Matrix(new int[,]
+            var matrix_2 = new Matrix(new double[,]
             {
                 { 5, 6 },
                 { 7, 8 }
             });
 
-            Assert.Equal<int[,]>(new int[,]
+            Assert.Equal<double[,]>(new double[,]
             {
                 { 19, 22 },
                 { 43, 50 }
@@ -132,13 +132,13 @@ namespace MatrixTests
         [Fact]
         public void MultiplyThrow()
         {
-            var matrix_1 = new Matrix(new int[,]
+            var matrix_1 = new Matrix(new double[,]
             {
                 { 0, 1, 9 },
                 { 1, 2, 0 }
             });
 
-            var matrix_2 = new Matrix(new int[,]
+            var matrix_2 = new Matrix(new double[,]
             {
                 { 0, 1 },
                 { 1, 2 }
@@ -151,7 +151,7 @@ namespace MatrixTests
         [Fact]
         public void MinusOut()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 0, 1 },
                 { 1, -2 }
@@ -159,7 +159,7 @@ namespace MatrixTests
 
             var result = -matrix;
 
-            Assert.Equal<int[,]>(new int[,]
+            Assert.Equal<double[,]>(new double[,]
             {
                 { 0, -1 },
                 { -1, 2, }
@@ -171,7 +171,7 @@ namespace MatrixTests
         [Fact]
         public void MultiplyNumber()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 0, 1 },
                 { 1, -2 }
@@ -179,7 +179,7 @@ namespace MatrixTests
 
             var result = 3 * matrix;
 
-            Assert.Equal<int[,]>(new int[,]
+            Assert.Equal<double[,]>(new double[,]
             {
                 { 0, 3 },
                 { 3, -6, }
@@ -189,7 +189,7 @@ namespace MatrixTests
         [Fact]
         public void Transpose()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 0, 1, 9 },
                 { 1, 2, 3 },
@@ -198,7 +198,7 @@ namespace MatrixTests
 
             matrix = matrix.Transpose();
 
-            Assert.Equal<int[,]>(new int[,]
+            Assert.Equal<double[,]>(new double[,]
             {
                 { 0, 1, 1 },
                 { 1, 2, 2 },
@@ -209,7 +209,7 @@ namespace MatrixTests
         [Fact]
         public void DeterminantRank1()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 1 },
             });
@@ -222,7 +222,7 @@ namespace MatrixTests
         [Fact]
         public void DeterminantRank2()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 1, 3 },
                 { 4, 2 }
@@ -236,7 +236,7 @@ namespace MatrixTests
         [Fact]
         public void DeterminantRank3()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 1, 3, 9 },
                 { 4, 2, 0 },
@@ -251,7 +251,7 @@ namespace MatrixTests
         [Fact]
         public void DeterminantRank4()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 3, -7, 1, 4 },
                 { 6, 2, -1, 8 },
@@ -267,7 +267,7 @@ namespace MatrixTests
         [Fact]
         public void DeterminantRank5()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 2, 3, 7, 10, 13 },
                 { 1, 2, 3, 4, 5 },
@@ -284,7 +284,7 @@ namespace MatrixTests
         [Fact]
         public void DeterminantThrow()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 2, 3, 7, 10, 13 },
                 { 1, 2, 3, 4, 5 },
@@ -297,7 +297,7 @@ namespace MatrixTests
         [Fact]
         public void InverseRank2()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 1, 2 },
                 { 3, 4 }
@@ -306,13 +306,13 @@ namespace MatrixTests
             var result = matrix.Inverse();
 
             Assert.Equal(-0.5, result.Item1);
-            Assert.Equal<int[,]>(new int[,] { { 4, -2 }, { -3, 1 } }, result.Item2);
+            Assert.Equal<double[,]>(new double[,] { { 4, -2 }, { -3, 1 } }, result.Item2);
         }
 
         [Fact]
         public void InverseRank3()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 2, 5, 7 },
                 { 6, 3, 4 },
@@ -322,13 +322,13 @@ namespace MatrixTests
             var result = matrix.Inverse();
 
             Assert.Equal(-1, result.Item1);
-            Assert.Equal<int[,]>(new int[,] { { -1, 1, -1 }, { 38, -41, 34 }, { -27, 29, -24} }, result.Item2);
+            Assert.Equal<double[,]>(new double[,] { { -1, 1, -1 }, { 38, -41, 34 }, { -27, 29, -24 } }, result.Item2);
         }
 
         [Fact]
         public void InverseThrow()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 2, 3, 7, 10, 13 },
                 { 1, 2, 3, 4, 5 },
@@ -341,7 +341,7 @@ namespace MatrixTests
         [Fact]
         public void MinorRank2()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 1, 2 },
                 { 3, 4 }
@@ -349,13 +349,13 @@ namespace MatrixTests
 
             var result = matrix.Minor();
 
-            Assert.Equal<int[,]>(new int[,] { { 4, 3 }, { 2, 1 } }, result);
+            Assert.Equal<double[,]>(new double[,] { { 4, 3 }, { 2, 1 } }, result);
         }
 
         [Fact]
         public void MinorRank3()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 2, 5, 7 },
                 { 6, 3, 4 },
@@ -364,13 +364,13 @@ namespace MatrixTests
 
             var result = matrix.Minor();
 
-            Assert.Equal<int[,]>(new int[,] { { -1, -38, -27 }, { -1, -41, -29 }, { -1, -34, -24} }, result);
+            Assert.Equal<double[,]>(new double[,] { { -1, -38, -27 }, { -1, -41, -29 }, { -1, -34, -24 } }, result);
         }
 
         [Fact]
         public void MinorThrow()
         {
-            var matrix = new Matrix(new int[,]
+            var matrix = new Matrix(new double[,]
             {
                 { 2, 3, 7, 10, 13 },
                 { 1, 2, 3, 4, 5 },
@@ -378,6 +378,39 @@ namespace MatrixTests
             });
 
             Assert.Throws<ArgumentException>(() => matrix.Minor());
+        }
+
+        [Fact]
+        public void PownThrow()
+        {
+            var matrix = new Matrix(new double[,]
+            {
+                { 2, 3, 7, 10 },
+                { 1, 2, 3, 4 },
+                { 3, 5, 11, 16 }
+            });
+
+            Assert.Throws<ArgumentException>(() => matrix.PowN(2));
+        }
+
+        [Fact]
+        public void Pown2()
+        {
+            var matrix = new Matrix(new double[,]
+            {
+                { 2, 3, 7 },
+                { 1, 2, 3 },
+                { 3, 5, 11 }
+            });
+
+            var result = matrix.PowN(2);
+
+            Assert.Equal<double[,]>(new double[,]
+            {
+                { 28, 47, 100 },
+                { 13, 22, 46 },
+                { 44, 74, 157 }
+            }, result);
         }
     }
 }

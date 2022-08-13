@@ -1,12 +1,16 @@
-﻿using System.Diagnostics;
-using MatrixLab;
+﻿using MatrixLab;
 
-Random ran = new Random();
-//var a = new Matrix(new double[,] { { 2, 2, 8, 3, 9 }, { 4, 8, 9, 39, 39 }, { 3, 8, 2, 6, 1 }, { 2, 8, 47, -3, 32 } });
-var a = new Matrix(new double[,] { { 1, 2 }, { 0, 0 } });
+var a = new Matrix(new double[,] {
+  { 1, 1, 1, 0 },
+  { 0, 1, 0, 4 },
+  { 1, 0, 6, 0 },
+  { 0, 2, 0, 3 }
+});
 
-var result = Matrix.Gauss(a);
+var result = a.Transpose().PowN(2);
 
 Console.WriteLine(result);
+
+Console.WriteLine(result.Determinant());
 
 Console.ReadLine();
