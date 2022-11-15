@@ -23,4 +23,5 @@ Console.WriteLine(result);
 Console.WriteLine(result.Determinant());
 ```
 
-img
+### Output
+![Output](https://github.com/WebWat/MatrixLab/blob/master/Images/output.png)
