@@ -88,17 +88,15 @@ namespace MatrixLab
 
         public static Matrix operator -(Matrix matrix)
         {
-            var result = new Matrix(matrix.Rows, matrix.Rows, matrix.Name);
-
             for (int i = 0; i < matrix.Rows; i++)
             {
                 for (int j = 0; j < matrix.Columns; j++)
                 {
-                    result[i, j] = -matrix[i, j];
+                    matrix[i, j] = -matrix[i, j];
                 }
             }
 
-            return result;
+            return matrix;
         }
 
         public static Matrix operator -(Matrix m1, Matrix m2)
@@ -111,17 +109,15 @@ namespace MatrixLab
             if (matrix_1.Columns != matrix_2.Columns || matrix_1.Rows != matrix_2.Rows)
                 throw new ArgumentException("Matrices sizes must be equals");
 
-            var result = new Matrix(matrix_1.Rows, matrix_1.Rows);
-
             for (int i = 0; i < matrix_1.Rows; i++)
             {
                 for (int j = 0; j < matrix_1.Columns; j++)
                 {
-                    result[i, j] = matrix_1[i, j] + matrix_2[i, j];
+                    matrix_1[i, j] += matrix_2[i, j];
                 }
             }
 
-            return result;
+            return matrix_1;
         }
 
         public static Matrix operator * (Matrix matrix_1, Matrix matrix_2)
@@ -153,18 +149,15 @@ namespace MatrixLab
 
         public static Matrix operator * (double x, Matrix matrix)
         {
-            var result = new Matrix(matrix.Rows, matrix.Rows, matrix.Name);
-
-
             for (int i = 0; i < matrix.Rows; i++)
             {
                 for (int j = 0; j < matrix.Columns; j++)
                 {
-                    result[i, j] = x * matrix[i, j];
+                    matrix[i, j] = x * matrix[i, j];
                 }
             }
 
-            return result;
+            return matrix;
         }
 
         public static Matrix CreateEmpty()
@@ -212,7 +205,7 @@ namespace MatrixLab
 
         public (double, Matrix) Inverse()
         {
-            if (Rows != Columns)
+            if (!IsSquare())
                 throw new ArgumentException("The matrix must be square");
 
             var result = new Matrix(this, Name);
@@ -235,7 +228,7 @@ namespace MatrixLab
 
         public Matrix Minor()
         {
-            if (Rows != Columns)
+            if (!IsSquare())
                 throw new ArgumentException("The matrix must be square");
 
             switch (Rows)
@@ -256,6 +249,7 @@ namespace MatrixLab
                         for (int j = 0; j < Columns; j++)
                         {
                             var matrix = new Matrix(Columns - 1, Columns - 1);
+
                             int column = 0, row = 0;
 
                             for (int a = 0; a < Rows; a++)
@@ -285,7 +279,7 @@ namespace MatrixLab
 
         public Matrix PowN(uint n)
         {
-            if (Rows != Columns)
+            if (!IsSquare())
                 throw new ArgumentException("The matrix must be square");
 
             if (n == 0)
@@ -303,7 +297,7 @@ namespace MatrixLab
 
         public double Determinant()
         {
-            if (Rows != Columns)
+            if (!IsSquare())
                 throw new ArgumentException("The matrix must be square");
 
             switch (Rows)
@@ -348,6 +342,25 @@ namespace MatrixLab
             }
         }
 
+        public double Tr()
+        {
+            if (!IsSquare())
+                throw new ArgumentException("The matrix must be square");
+
+            double result = 0;
+
+            for (int i = 0; i < Rows; i++)
+            {
+                result += _array[i, i];
+            }
+
+            return result;
+        }
+
+        public bool IsSquare() => Rows == Columns;
+
+
+        // ?
         public static Matrix MMR(Matrix a, Matrix b)
         {
             if (a.Rows != a.Columns || b.Rows > 1 || a.Columns != b.Columns)

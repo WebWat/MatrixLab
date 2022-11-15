@@ -70,10 +70,35 @@ type public Matrix(array: int[,]) =
                 
         Matrix newArray
 
+//double result = 0;
+
+//                    for (int i = 0; i < Columns; i++)
+//                    {
+//                        double value = _array[0, i];
+//                        var matrix = new Matrix(Columns - 1, Columns - 1);
+//                        int column = 0;
+
+//                        for (int a = 1; a < Rows; a++)
+//                        {
+//                            for (int b = 0; b < Columns; b++)
+//                            {
+//                                if (b != i)
+//                                {
+//                                    matrix[a - 1, column] = _array[a, b];
+//                                    column++;
+//                                }
+//                            }
+//                            column = 0;
+//                        }
+
+//                        result += (i % 2 == 0 ? 1 : (-1)) * value * matrix.Determinant();
+//                    }
+
+//                    return result; 
     member this.Determiner() =
         if this.Columns <> this.Rows then
             raise (ArgumentException("Error"))
-        let func x =
+        let rec func x =
             match x with
                 | (2, 2) -> array[0, 0] * array[1, 1] - array[0, 1] * array[1, 0]
                 | (3, 3) -> array[0, 0] * array[1, 1] * array[2, 2] + 
