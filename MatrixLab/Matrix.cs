@@ -329,14 +329,14 @@ namespace MatrixLab
                                         {
                                             for (int j = offset; j < firstColumn; j++)
                                             {
-                                                matrix[i, c++] = _array[i, j];
+                                                matrix[0, c++] = _array[i, j];
                                             }
 
-                                            matrix[i, c++] = _array[i, current];
+                                            matrix[0, c++] = _array[i, current];
 
                                             for (int j = lastColumn + 1; j <= Columns - 1 - offset; j++)
                                             {
-                                                matrix[i, c++] = _array[i, j];
+                                                matrix[0, c++] = _array[i, j];
                                             }
                                         }
 
