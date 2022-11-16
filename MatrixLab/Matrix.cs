@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using Spectre.Console;
+using Spectre.Console.Rendering;
+using System.Text;
 
 namespace MatrixLab
 {
@@ -160,7 +162,7 @@ namespace MatrixLab
             return matrix;
         }
 
-        public static Matrix CreateEmpty()
+        public static Matrix Empty()
         {
             return new Matrix(0, 0);
         }
@@ -226,54 +228,171 @@ namespace MatrixLab
             return (1d / Determinant(), result);
         }
 
-        public Matrix Minor()
+        public Matrix Minor(int k = 1)
         {
-            if (!IsSquare())
+            if (!IsSquare() && k == 1)
                 throw new ArgumentException("The matrix must be square");
 
-            switch (Rows)
+            if (k == 1)
             {
-                case 1:
-                    return new Matrix(this, Name);
-                case 2:
-                    return new Matrix(new double[,]
-                    {
+                switch (Rows)
+                {
+                    case 1:
+                        return new Matrix(this, Name);
+                    case 2:
+                        return new Matrix(new double[,]
+                        {
                         { _array[1, 1], _array[1, 0] },
                         { _array[0, 1], _array[0, 0] }
-                    }, Name);
-                default:
-                    var result = new Matrix(Columns, Columns, Name);
+                        }, Name);
+                    default:
+                        var result = new Matrix(Columns, Columns, Name);
 
-                    for (int i = 0; i < Rows; i++)
-                    {
-                        for (int j = 0; j < Columns; j++)
+                        for (int i = 0; i < Rows; i++)
                         {
-                            var matrix = new Matrix(Columns - 1, Columns - 1);
-
-                            int column = 0, row = 0;
-
-                            for (int a = 0; a < Rows; a++)
+                            for (int j = 0; j < Columns; j++)
                             {
-                                for (int b = 0; b < Columns; b++)
+                                var matrix = new Matrix(Columns - 1, Columns - 1);
+
+                                int column = 0, row = 0;
+
+                                for (int a = 0; a < Rows; a++)
                                 {
-                                    if (a != i && b != j)
+                                    for (int b = 0; b < Columns; b++)
                                     {
-                                        matrix[row, column] = _array[a, b];
-                                        column++;
+                                        if (a != i && b != j)
+                                        {
+                                            matrix[row, column] = _array[a, b];
+                                            column++;
+                                        }
+                                    }
+
+                                    if (column != 0)
+                                        row++;
+
+                                    column = 0;
+                                }
+
+                                result[i, j] = matrix.Determinant();
+                            }
+                        }
+
+                        return result;
+                }
+            }
+            else
+            {
+                var matrix = new Matrix(k, k);
+                List<double> results = new();
+
+                List<int> data = new () { 1, 2 };
+                data = data.OrderByDescending(a => a).ToList();
+
+                int rows = Rows;
+                int offsetRow = 0;
+
+                while (rows >= k)
+                {
+                    for (int b = 0; b < data.Count; b++)
+                    {
+                        Console.WriteLine($"{b + 1}. Row try [Rows - {rows}]");
+
+                        int firstRow = data.Count - 1 - b + offsetRow;
+                        int lastRow = Rows - 1 - b - offsetRow;
+                        int currentRow = b != 0 ? firstRow + 1 : firstRow;
+
+                        Console.WriteLine($"First row index: {firstRow} Last row index: {lastRow}");
+
+                        while (currentRow <= lastRow)
+                        {
+                            int columns = Columns;
+                            int offset = 0;
+
+                            while (columns >= k)
+                            {
+                                for (int a = 0; a < data.Count; a++)
+                                {
+                                    Console.WriteLine($"\t\t{a + 1}. Column try [Columns - {columns}]");
+
+                                    int firstColumn = data.Count - 1 - a + offset;
+                                    int lastColumn = Columns - 1 - a - offset;
+
+                                    Console.WriteLine($"\t\tFirst column index: {firstColumn} Last column index: {lastColumn}");
+
+                                    int current = a != 0 ? firstColumn + 1 : firstColumn;
+
+                                    while (current <= lastColumn)
+                                    {
+                                        Console.WriteLine("--------");
+
+                                        for (int i = offsetRow, c = 0; i < firstRow; i++, c = 0)
+                                        {
+                                            for (int j = offset; j < firstColumn; j++)
+                                            {
+                                                matrix[i, c++] = _array[i, j];
+                                            }
+
+                                            matrix[i, c++] = _array[i, current];
+
+                                            for (int j = lastColumn + 1; j <= Columns - 1 - offset; j++)
+                                            {
+                                                matrix[i, c++] = _array[i, j];
+                                            }
+                                        }
+
+                                        int diff = firstRow - offsetRow;
+
+                                        for (int i = currentRow, c = 0; i == currentRow; i++)
+                                        {
+                                            for (int j = offset; j < firstColumn; j++)
+                                            {
+                                                matrix[diff, c++] = _array[i, j];
+                                            }
+
+                                            matrix[diff, c++] = _array[i, current];
+
+                                            for (int j = lastColumn + 1; j <= Columns - 1 - offset; j++)
+                                            {
+                                                matrix[diff, c++] = _array[i, j];
+                                            }
+                                        }
+
+                                        for (int i = lastRow + 1, c = 0; i <= Rows - 1 - offsetRow; i++, c = 0)
+                                        {
+                                            for (int j = offset; j < firstColumn; j++)
+                                            {
+                                                matrix[diff + 1, c++] = _array[i, j];
+                                            }
+
+                                            matrix[diff + 1, c++] = _array[i, current];
+
+                                            for (int j = lastColumn + 1; j <= Columns - 1 - offset; j++)
+                                            {
+                                                matrix[diff + 1, c++] = _array[i, j];
+                                            }
+                                        }
+
+                                        Console.WriteLine(matrix);
+
+                                        results.Add(matrix.Determinant());
+
+                                        current++;
                                     }
                                 }
 
-                                if (column != 0)
-                                    row++;
-
-                                column = 0;
+                                columns -= 2;
+                                offset++;
                             }
-
-                            result[i, j] = matrix.Determinant();
+                            currentRow++;
                         }
                     }
+                    rows -= 2;
+                    offsetRow++;
+                }
 
-                    return result;
+                Console.WriteLine(results.Count);
+
+                return null;          
             }
         }
 
@@ -342,7 +461,8 @@ namespace MatrixLab
             }
         }
 
-        public double Tr()
+
+        public double Trace()
         {
             if (!IsSquare())
                 throw new ArgumentException("The matrix must be square");
@@ -358,6 +478,20 @@ namespace MatrixLab
         }
 
         public bool IsSquare() => Rows == Columns;
+
+        public bool IsZero()
+        {
+            for (int i = 0; i < Rows; i++)
+            {
+                for (int j = 0; j < Columns; j++)
+                {
+                    if (_array[i, j] != 0)
+                        return false;
+                }
+            }
+
+            return true;
+        }
 
 
         // ?

@@ -1,13 +1,13 @@
 ﻿using MatrixLab;
 
 var a = new Matrix(new double[,] {
-    { 1, 1, 1, 0 },
-    { 0, 1, 0, 4 },
-    { 1, 0, 6, 0 },
-    { 0, 2, 0, 3 }
+    { 1, -1, 7, -5, 3 },
+    { 2, 5, -3, 9, 4  },
+    { 3, -2, 8, 1, 5  },
+    { 4, 6, -4, 2, 6  }
 });
 
 
-Console.WriteLine("end");
+a.Minor(2);
 
 Console.ReadLine();
