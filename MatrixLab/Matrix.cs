@@ -285,8 +285,12 @@ namespace MatrixLab
                 var matrix = new Matrix(k, k);
                 List<double> results = new();
 
-                List<int> data = new () { 1, 2 };
-                data = data.OrderByDescending(a => a).ToList();
+                List<int> data = new();
+
+                for (int i = k; i >=1; i--)
+                {
+                    data.Add(i);
+                }
 
                 int rows = Rows;
                 int offsetRow = 0;
@@ -390,7 +394,12 @@ namespace MatrixLab
                     offsetRow++;
                 }
 
-                Console.WriteLine(results.Count);
+                Console.WriteLine($"\n[Total {results.Count}] Result:\n===================");
+
+                foreach(var item in results)
+                {
+                    Console.WriteLine(item);
+                }
 
                 return null;          
             }
@@ -491,6 +500,20 @@ namespace MatrixLab
             }
 
             return true;
+        }
+
+        public bool ContainsZero()
+        {
+            for (int i = 0; i < Rows; i++)
+            {
+                for (int j = 0; j < Columns; j++)
+                {
+                    if (_array[i, j] == 0)
+                        return true;
+                }
+            }
+
+            return false;
         }
 
 

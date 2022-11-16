@@ -8,6 +8,6 @@ var a = new Matrix(new double[,] {
 });
 
 
-a.Minor(2);
+a.Minor(3);
 
 Console.ReadLine();
