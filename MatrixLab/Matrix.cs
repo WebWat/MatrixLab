@@ -329,22 +329,22 @@ namespace MatrixLab
                                     {
                                         Console.WriteLine("--------");
 
-                                        for (int i = offsetRow, c = 0; i < firstRow; i++, c = 0)
+                                        int diff = firstRow - offsetRow;
+
+                                        for (int i = offsetRow, c = 0, inc = 0; i < firstRow && inc < diff; i++, c = 0, inc++)
                                         {
                                             for (int j = offset; j < firstColumn; j++)
                                             {
-                                                matrix[0, c++] = _array[i, j];
+                                                matrix[inc, c++] = _array[i, j];
                                             }
 
-                                            matrix[0, c++] = _array[i, current];
+                                            matrix[inc, c++] = _array[i, current];
 
                                             for (int j = lastColumn + 1; j <= Columns - 1 - offset; j++)
                                             {
-                                                matrix[0, c++] = _array[i, j];
+                                                matrix[inc, c++] = _array[i, j];
                                             }
                                         }
-
-                                        int diff = firstRow - offsetRow;
 
                                         for (int i = currentRow, c = 0; i == currentRow; i++)
                                         {
@@ -361,18 +361,18 @@ namespace MatrixLab
                                             }
                                         }
 
-                                        for (int i = lastRow + 1, c = 0; i <= Rows - 1 - offsetRow; i++, c = 0)
+                                        for (int i = lastRow + 1, c = 0, inc = 1; i <= Rows - 1 - offsetRow; i++, c = 0, inc++)
                                         {
                                             for (int j = offset; j < firstColumn; j++)
                                             {
-                                                matrix[diff + 1, c++] = _array[i, j];
+                                                matrix[diff + inc, c++] = _array[i, j];
                                             }
 
-                                            matrix[diff + 1, c++] = _array[i, current];
+                                            matrix[diff + inc, c++] = _array[i, current];
 
                                             for (int j = lastColumn + 1; j <= Columns - 1 - offset; j++)
                                             {
-                                                matrix[diff + 1, c++] = _array[i, j];
+                                                matrix[diff + inc, c++] = _array[i, j];
                                             }
                                         }
 
