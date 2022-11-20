@@ -218,13 +218,9 @@ namespace MatrixLab
                 {
                     for (int b = 0; b < data.Count && flag; b++)
                     {
-                        Console.WriteLine($"{b + 1}. Row try [Rows - {rows}]");
-
                         int firstRow = data.Count - 1 - b + offsetRow;
                         int lastRow = Rows - 1 - b - offsetRow;
                         int currentRow = b != 0 ? firstRow + 1 : firstRow;
-
-                        Console.WriteLine($"First row index: {firstRow} Last row index: {lastRow}");
 
                         while (currentRow <= lastRow && flag)
                         {
@@ -235,19 +231,13 @@ namespace MatrixLab
                             {
                                 for (int a = 0; a < data.Count && flag; a++)
                                 {
-                                    Console.WriteLine($"\t\t{a + 1}. Column try [Columns - {columns}]");
-
                                     int firstColumn = data.Count - 1 - a + offset;
                                     int lastColumn = Columns - 1 - a - offset;
-
-                                    Console.WriteLine($"\t\tFirst column index: {firstColumn} Last column index: {lastColumn}");
 
                                     int current = a != 0 ? firstColumn + 1 : firstColumn;
 
                                     while (current <= lastColumn)
                                     {
-                                        Console.WriteLine("--------");
-
                                         int diff = firstRow - offsetRow;
 
                                         for (int i = offsetRow, c = 0, inc = 0; i < firstRow && inc < diff; i++, c = 0, inc++)
@@ -294,8 +284,6 @@ namespace MatrixLab
                                                 matrix[diff + inc, c++] = _array[i, j];
                                             }
                                         }
-
-                                        Console.WriteLine(matrix);
 
                                         if (matrix.Determinant() != 0)
                                         {
@@ -421,6 +409,7 @@ namespace MatrixLab
             }
             else
             {
+                
                 var matrix = new Matrix(k, k);
                 var result = new Matrix(1, NumberOfMinors(k));
                 int l = 0;
@@ -439,13 +428,9 @@ namespace MatrixLab
                 {
                     for (int b = 0; b < data.Count; b++)
                     {
-                        Console.WriteLine($"{b + 1}. Row try [Rows - {rows}]");
-
                         int firstRow = data.Count - 1 - b + offsetRow;
                         int lastRow = Rows - 1 - b - offsetRow;
                         int currentRow = b != 0 ? firstRow + 1 : firstRow;
-
-                        Console.WriteLine($"First row index: {firstRow} Last row index: {lastRow}");
 
                         while (currentRow <= lastRow)
                         {
@@ -456,19 +441,13 @@ namespace MatrixLab
                             {
                                 for (int a = 0; a < data.Count; a++)
                                 {
-                                    Console.WriteLine($"\t\t{a + 1}. Column try [Columns - {columns}]");
-
                                     int firstColumn = data.Count - 1 - a + offset;
                                     int lastColumn = Columns - 1 - a - offset;
-
-                                    Console.WriteLine($"\t\tFirst column index: {firstColumn} Last column index: {lastColumn}");
 
                                     int current = a != 0 ? firstColumn + 1 : firstColumn;
 
                                     while (current <= lastColumn)
                                     {
-                                        Console.WriteLine("--------");
-
                                         int diff = firstRow - offsetRow;
 
                                         for (int i = offsetRow, c = 0, inc = 0; i < firstRow && inc < diff; i++, c = 0, inc++)
@@ -516,8 +495,6 @@ namespace MatrixLab
                                             }
                                         }
 
-                                        Console.WriteLine(matrix);
-
                                         result[0, l++] = matrix.Determinant();
 
                                         current++;
@@ -558,6 +535,9 @@ namespace MatrixLab
 
         public int NumberOfMinors(int k = 2)
         {
+            if (k < 1)
+                throw new ArgumentException("The k cannot be less than 1");
+
             int Factorial (int n)
             {
                 if (n <= 2)
@@ -618,7 +598,6 @@ namespace MatrixLab
                     return result;             
             }
         }
-
 
         public double Trace()
         {

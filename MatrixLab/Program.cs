@@ -7,6 +7,8 @@ var a = new Matrix(new double[,] {
     { 8, 5, 7, 12 }
 });
 
+var b = a;
+
 
 Console.WriteLine(a.Rank());
 

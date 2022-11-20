@@ -412,5 +412,88 @@ namespace MatrixTests
                 { 44, 74, 157 }
             }, result);
         }
+
+        [Fact]
+        public void TraceThrow()
+        {
+            var matrix = new Matrix(new double[,]
+            {
+                { 2, 3, 7, 0 },
+                { 1, 2, 3, 0 },
+                { 3, 5, 11, 0 }
+            });
+
+            Assert.Throws<ArgumentException>(() => matrix.Trace());
+        }
+
+        [Fact]
+        public void Trace()
+        {
+            var matrix = new Matrix(new double[,]
+            {
+                { 2, 3, 7 },
+                { 1, 2, 3 },
+                { 3, 5, 11 }
+            });
+
+            var result = matrix.Trace();
+
+            Assert.Equal(15, result);
+        }
+
+
+        [Fact]
+        public void Rank4()
+        {
+            var matrix = new Matrix(new double[,]
+            {
+                { 1, -1, 7, -5, 3 },
+                { 2, 5, -3, 9, 4 },
+                { 3, -2, 8, 1, 5 },
+                { 4, 6, -4, 2, 6}
+            });
+
+            var result = matrix.Rank();
+
+            Assert.Equal(4, result);
+        }
+
+        [Fact]
+        public void Rank3()
+        {
+            var matrix = new Matrix(new double[,]
+            {
+                { 1, 2, 0, 5 },
+                { 2, 4, -1, 0 },
+                { -2, -4, 1, 0 },
+                { 1, 0, 2, 1 }
+            });
+
+            var result = matrix.Rank();
+
+            Assert.Equal(3, result);
+        }
+
+        [Fact]
+        public void Rank0()
+        {
+            var matrix = new Matrix(10, 10);
+
+            var result = matrix.Rank();
+
+            Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public void Rank1()
+        {
+            var matrix = new Matrix(10, 10);
+
+            matrix[0, 0] = 1;
+
+            var result = matrix.Rank();
+
+            Assert.Equal(1, result);
+        }
     }
 }
